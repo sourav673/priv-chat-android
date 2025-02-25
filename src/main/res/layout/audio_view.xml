@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       tools:context="org.thoughtcrime.securesms.components.AudioView">
+
+    <LinearLayout android:id="@+id/audio_widget_container"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+        <LinearLayout android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"
+                      android:orientation="horizontal">
+
+            <org.thoughtcrime.securesms.components.AnimatingToggle
+                    android:id="@+id/control_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+
+                <ImageView android:id="@+id/play"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_gravity="center_vertical"
+                           android:gravity="center_vertical"
+                           android:clickable="true"
+                           android:visibility="gone"
+                           android:background="@drawable/circle_touch_highlight_background"
+                           android:src="@drawable/ic_play_circle_fill_white_48dp"
+                           android:scaleType="centerInside"
+                           tools:visibility="gone"
+                           android:contentDescription="@string/menu_play"/>
+
+                <ImageView android:id="@+id/pause"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_gravity="center_vertical"
+                           android:gravity="center_vertical"
+                           android:clickable="true"
+                           android:visibility="gone"
+                           android:background="@drawable/circle_touch_highlight_background"
+                           android:src="@drawable/ic_pause_circle_fill_white_48dp"
+                           android:scaleType="centerInside"
+                           android:contentDescription="@string/menu_pause"/>
+
+            </org.thoughtcrime.securesms.components.AnimatingToggle>
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="fill_parent"
+                          android:orientation="vertical">
+
+                <SeekBar android:id="@+id/seek"
+                         android:layout_width="fill_parent"
+                         android:layout_height="0dp"
+                         android:layout_weight="2"
+                         android:layout_gravity="center_vertical"/>
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:layout_gravity="top"
+                              android:orientation="horizontal">
+
+                    <TextView android:id="@+id/timestamp"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_marginLeft="8dp"
+                              android:layout_marginRight="8dp"
+                              android:textAppearance="?android:attr/textAppearanceSmall"
+                              android:textColor="@color/audio_icon"
+                              style="@style/Signal.Text.Caption"
+                              android:autoLink="none"
+                              android:ellipsize="end"
+                              android:singleLine="true"
+                              android:visibility="visible"/>
+
+                    <TextView android:id="@+id/title"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_marginRight="8dp"
+                              android:layout_marginEnd="8dp"
+                              android:textAppearance="?android:attr/textAppearanceSmall"
+                              android:textColor="@color/audio_icon"
+                              style="@style/Signal.Text.Caption"
+                              android:autoLink="none"
+                              android:ellipsize="end"
+                              android:singleLine="true"
+                              android:visibility="visible"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- transparent overlay to easily block clicks in audio player's components in multi-select mode -->
+    <LinearLayout
+        android:id="@+id/interception_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:visibility="gone" />
+
+</merge>

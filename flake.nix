@@ -1,0 +1,45 @@
+{
+  description = "Delta Chat for Android";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    flake-utils.url = "github:numtide/flake-utils";
+    android.url = "github:tadfisher/android-nixpkgs";
+  };
+
+  outputs = { self, nixpkgs, rust-overlay, flake-utils, android }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        overlays = [ (import rust-overlay) ];
+        pkgs = import nixpkgs { inherit system overlays; };
+        android-sdk = android.sdk.${system} (sdkPkgs:
+          with sdkPkgs; [
+            build-tools-33-0-1
+            cmdline-tools-latest
+            platform-tools
+            platforms-android-34
+            ndk-27-0-11902837
+          ]);
+        rust-version = pkgs.lib.removeSuffix "\n"
+          (builtins.readFile ./scripts/rust-toolchain);
+      in {
+        devShells.default = pkgs.mkShell {
+          ANDROID_SDK_ROOT = "${android-sdk}/share/android-sdk";
+          ANDROID_NDK_ROOT =
+            "${android-sdk}/share/android-sdk/ndk/27.0.11902837";
+          buildInputs = [
+            android-sdk
+            pkgs.openjdk17
+            (pkgs.buildPackages.rust-bin.stable."${rust-version}".minimal.override {
+              targets = [
+                "armv7-linux-androideabi"
+                "aarch64-linux-android"
+                "i686-linux-android"
+                "x86_64-linux-android"
+              ];
+            })
+          ];
+        };
+      });
+}

@@ -1,0 +1,38 @@
+name: "Publish @deltachat/jsonrpc-client"
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  pack-module:
+    name: "Publish @deltachat/jsonrpc-client"
+    runs-on: ubuntu-20.04
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies without running scripts
+        working-directory: deltachat-jsonrpc/typescript
+        run: npm install --ignore-scripts
+
+      - name: Package
+        working-directory: deltachat-jsonrpc/typescript
+        run: |
+          npm run build
+          npm pack .
+
+      - name: Publish
+        working-directory: deltachat-jsonrpc/typescript
+        run: npm publish --provenance deltachat-jsonrpc-client-* --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
